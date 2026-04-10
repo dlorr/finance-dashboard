@@ -1,0 +1,35 @@
+@use "~/assets/scss/_variables.scss" as *;
+
+@mixin flex($align: center, $justify: flex-start, $gap: 0) {
+  display: flex;
+  align-items: $align;
+  justify-content: $justify;
+  @if $gap != 0 {
+    gap: $gap;
+  }
+}
+
+@mixin card {
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $border-radius;
+  padding: $space-lg;
+}
+
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == "mobile" {
+    @media (max-width: 640px) {
+      @content;
+    }
+  }
+  @if $breakpoint == "tablet" {
+    @media (max-width: 1024px) {
+      @content;
+    }
+  }
+  @if $breakpoint == "desktop" {
+    @media (min-width: 1025px) {
+      @content;
+    }
+  }
+}
