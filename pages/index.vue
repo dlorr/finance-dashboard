@@ -2,17 +2,17 @@
   <div class="dashboard-page">
     <h1 class="dashboard-page__heading">Overview</h1>
 
-    <div v-if="isLoading">Loading...</div>
-    <div v-else-if="error" class="error">{{ error }}</div>
+    <template v-if="isLoading">
+      <div class="dashboard-page__loading">Loading your finances...</div>
+    </template>
+
+    <template v-else-if="error">
+      <div class="dashboard-page__error">{{ error }}</div>
+    </template>
 
     <template v-else>
-      <!-- Phase 3: components go here -->
-      <pre style="color: #6c63ff; font-size: 0.75rem"
-        >{{ summary }}
-      </pre>
-      <pre style="color: #22c55e; font-size: 0.75rem">
-Monthly: {{ monthlySnapshots }}
-      </pre>
+      <SummaryCards />
+      <TransactionTable />
     </template>
   </div>
 </template>
@@ -21,15 +21,15 @@ Monthly: {{ monthlySnapshots }}
 import { onMounted } from "vue";
 import { useFinanceStore } from "~/stores/useFinanceStore";
 import { useFinanceStats } from "~/composables/useFinanceStats";
+import SummaryCards from "~/features/dashboard/SummaryCards.vue";
+import TransactionTable from "~/features/dashboard/TransactionTable.vue";
 
 definePageMeta({ layout: "dashboard" });
 
 const store = useFinanceStore();
-const { summary, monthlySnapshots, isLoading, error } = useFinanceStats();
+const { isLoading, error } = useFinanceStats();
 
-onMounted(() => {
-  store.loadTransactions();
-});
+onMounted(() => store.loadTransactions());
 </script>
 
 <style lang="scss" scoped>
@@ -38,6 +38,18 @@ onMounted(() => {
     font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: $space-lg;
+  }
+
+  &__loading,
+  &__error {
+    @include flex($justify: center);
+    padding: $space-2xl;
+    color: $color-text-muted;
+    font-size: 0.9rem;
+  }
+
+  &__error {
+    color: $color-danger;
   }
 }
 </style>
