@@ -12,6 +12,12 @@
 
     <template v-else>
       <SummaryCards />
+
+      <div class="dashboard-page__charts">
+        <ChartIncomeExpenses />
+        <ChartExpenseCategories />
+      </div>
+
       <TransactionTable />
     </template>
   </div>
@@ -23,6 +29,8 @@ import { useFinanceStore } from "~/stores/useFinanceStore";
 import { useFinanceStats } from "~/composables/useFinanceStats";
 import SummaryCards from "~/features/dashboard/SummaryCards.vue";
 import TransactionTable from "~/features/dashboard/TransactionTable.vue";
+import ChartIncomeExpenses from "~/features/dashboard/ChartIncomeExpenses.vue";
+import ChartExpenseCategories from "~/features/dashboard/ChartExpenseCategories.vue";
 
 definePageMeta({ layout: "dashboard" });
 
@@ -38,6 +46,17 @@ onMounted(() => store.loadTransactions());
     font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: $space-lg;
+  }
+
+  &__charts {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: $space-md;
+    margin-bottom: $space-md;
+
+    @include respond-to("tablet") {
+      grid-template-columns: 1fr;
+    }
   }
 
   &__loading,

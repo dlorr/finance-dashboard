@@ -79,6 +79,29 @@ export function useFinanceStats() {
       .slice(0, 5),
   );
 
+  // ── Chart: Income vs Expenses series ─────────────────────────────────────────
+
+  const incomeExpensesChartData = computed(() => ({
+    series: [
+      {
+        name: "Income",
+        data: monthlySnapshots.value.map((s) => s.income),
+      },
+      {
+        name: "Expenses",
+        data: monthlySnapshots.value.map((s) => s.expenses),
+      },
+    ],
+    categories: monthlySnapshots.value.map((s) => s.month),
+  }));
+
+  // ── Chart: Expense categories series ─────────────────────────────────────────
+
+  const categoryChartData = computed(() => ({
+    series: categoryBreakdown.value.map((c) => c.amount),
+    labels: categoryBreakdown.value.map((c) => c.category),
+  }));
+
   return {
     // State passthrough
     transactions,
@@ -90,5 +113,8 @@ export function useFinanceStats() {
     categoryBreakdown,
     monthlySnapshots,
     recentTransactions,
+
+    incomeExpensesChartData,
+    categoryChartData,
   };
 }
