@@ -28,9 +28,21 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useFinanceStats } from "~/composables/useFinanceStats";
+import { useCountUp } from "~/composables/useCountUp";
 import BaseCard from "~/components/ui/BaseCard.vue";
 
 const { summary } = useFinanceStats();
+
+const { display: balanceDisplay } = useCountUp(
+  () => summary.value.totalBalance,
+);
+const { display: incomeDisplay } = useCountUp(() => summary.value.totalIncome);
+const { display: expensesDisplay } = useCountUp(
+  () => summary.value.totalExpenses,
+);
+const { display: savingsDisplay } = useCountUp(
+  () => summary.value.totalSavings,
+);
 
 const formatCurrency = (value: number): string =>
   new Intl.NumberFormat("en-PH", { style: "currency", currency: "PHP" }).format(
@@ -40,7 +52,7 @@ const formatCurrency = (value: number): string =>
 const cards = computed(() => [
   {
     label: "Total Balance",
-    value: summary.value.totalBalance,
+    value: balanceDisplay.value,
     icon: "💰",
     color: "primary",
     accent: true,
@@ -48,7 +60,7 @@ const cards = computed(() => [
   },
   {
     label: "Total Income",
-    value: summary.value.totalIncome,
+    value: incomeDisplay.value,
     icon: "📈",
     color: "success",
     accent: false,
@@ -56,7 +68,7 @@ const cards = computed(() => [
   },
   {
     label: "Total Expenses",
-    value: summary.value.totalExpenses,
+    value: expensesDisplay.value,
     icon: "📉",
     color: "danger",
     accent: false,
@@ -64,7 +76,7 @@ const cards = computed(() => [
   },
   {
     label: "Savings Rate",
-    value: summary.value.totalSavings,
+    value: savingsDisplay.value,
     icon: "🏦",
     color: "warning",
     accent: false,

@@ -28,6 +28,7 @@ import AppTopbar from "~/components/layout/AppTopbar.vue";
 
     @include respond-to("tablet") {
       margin-left: 0;
+      padding-top: $topbar-height;
     }
   }
 
