@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import type { FinanceState, Transaction } from "~/types/finance";
-import { mockTransactions } from "~/data/mockTransactions";
+import { financeService } from "~/services/financeService";
 
 export const useFinanceStore = defineStore("finance", {
   state: (): FinanceState => ({
@@ -41,23 +41,19 @@ export const useFinanceStore = defineStore("finance", {
   },
 
   actions: {
-    // ── Data loading ───────────────────────────────────────────────────────
-    // This is the ONLY place that knows about the data source.
-    // Swap mockTransactions for an API call here in Phase 6 — nothing else changes.
     async loadTransactions(): Promise<void> {
       this.isLoading = true;
       this.error = null;
 
-      try {
-        // Simulate async fetch (mirrors future API call structure)
-        await new Promise((resolve) => setTimeout(resolve, 600));
-        this.transactions = mockTransactions;
-      } catch (err) {
-        this.error =
-          err instanceof Error ? err.message : "Failed to load transactions";
-      } finally {
-        this.isLoading = false;
+      const { data, error, success } = await financeService.getTransactions();
+
+      if (success) {
+        this.transactions = data;
+      } else {
+        this.error = error;
       }
+
+      this.isLoading = false;
     },
   },
 });

@@ -64,3 +64,25 @@ export interface FinanceState {
   isLoading: boolean;
   error: string | null;
 }
+
+// ─── Filters (future) ─────────────────────────────────────────────────────────
+
+export interface TransactionFilters {
+  dateFrom?: string; // ISO date
+  dateTo?: string; // ISO date
+  type?: TransactionType | null;
+  categories?: TransactionCategory[];
+  search?: string;
+}
+
+export interface PaginationOptions {
+  page: number;
+  perPage: number;
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  page: number;
+  totalPages: number;
+}

@@ -22,16 +22,18 @@ export function useCountUp(target: () => number, duration = 800) {
     }
   };
 
-  //   watch(
-  //     target,
-  //     (newVal, oldVal = 0) => {
-  //       cancelAnimationFrame(animationFrame);
-  //       animationFrame = requestAnimationFrame(() =>
-  //         animate(oldVal, newVal, performance.now()),
-  //       );
-  //     },
-  //     { immediate: true },
-  //   );
+  // watch(
+  //   target,
+  //   (newVal, oldVal = 0) => {
+  //     cancelAnimationFrame(animationFrame);
+  //     animationFrame = requestAnimationFrame(() =>
+  //       animate(oldVal, newVal, performance.now()),
+  //     );
+  //   },
+  //   { immediate: true },
+  // );
+
+  // return { display };
 
   watch(
     target,

@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   app: {
     pageTransition: { name: "page", mode: "out-in" },
     head: {
+      title: "FinanceOS",
       link: [
         {
           rel: "stylesheet",
@@ -12,6 +13,10 @@ export default defineNuxtConfig({
     },
   },
 
+  plugins: [
+    "~/plugins/apexcharts.client.ts",
+    "~/plugins/pinia-persistence.client.ts",
+  ],
   modules: ["@pinia/nuxt"],
 
   css: ["~/assets/scss/main.scss"],
