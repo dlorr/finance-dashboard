@@ -17,7 +17,8 @@ export interface ServiceResponse<T> {
 // 2. Replace the mock return below with the fetch call
 // 3. Nothing else in the app changes
 
-const BASE_URL = useRuntimeConfig().public.apiBaseUrl;
+const BASE_URL = null;
+// const BASE_URL = useRuntimeConfig().public.apiBaseUrl;
 
 async function get<T>(endpoint: string): Promise<ServiceResponse<T>> {
   // ── MOCK MODE (no API_BASE_URL set) ───────────────────────────────────────

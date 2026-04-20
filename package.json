@@ -19,6 +19,7 @@
     "vue3-apexcharts": "^1.11.1"
   },
   "devDependencies": {
+    "@types/node": "^25.6.0",
     "sass": "^1.99.0"
   }
 }

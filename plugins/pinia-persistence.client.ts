@@ -1,11 +1,13 @@
-export default defineNuxtPlugin(({ $pinia }) => {
-  $pinia.use(({ store }) => {
-    // Only persist the finance store
+import { type Pinia } from "pinia";
+
+export default defineNuxtPlugin((nuxtApp) => {
+  const pinia = nuxtApp.$pinia as Pinia;
+
+  pinia.use(({ store }) => {
     if (store.$id !== "finance") return;
 
     const STORAGE_KEY = "finance:transactions";
 
-    // Rehydrate from storage on init
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
@@ -15,7 +17,6 @@ export default defineNuxtPlugin(({ $pinia }) => {
       localStorage.removeItem(STORAGE_KEY);
     }
 
-    // Persist on every state change
     store.$subscribe((_, state) => {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state.transactions));
