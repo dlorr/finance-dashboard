@@ -91,6 +91,7 @@ const cards = computed(() => [
   grid-template-columns: repeat(4, 1fr);
   gap: $space-md;
   margin-bottom: $space-xl;
+  min-width: 0;
 
   @include respond-to("tablet") {
     grid-template-columns: repeat(2, 1fr);
@@ -98,6 +99,10 @@ const cards = computed(() => [
 
   @include respond-to("mobile") {
     grid-template-columns: 1fr;
+  }
+
+  &__item {
+    min-width: 0;
   }
 }
 

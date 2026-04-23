@@ -13,45 +13,47 @@
       <p>No transactions yet</p>
     </div>
 
-    <!-- Table -->
-    <div v-else class="transaction-table">
-      <div class="transaction-table__head">
-        <span>Description</span>
-        <span>Category</span>
-        <span>Date</span>
-        <span class="transaction-table__col--right">Amount</span>
-      </div>
-
-      <div
-        v-for="transaction in transactions"
-        :key="transaction.id"
-        class="transaction-table__row"
-      >
-        <div class="transaction-table__desc">
-          <span
-            class="transaction-table__badge"
-            :class="`transaction-table__badge--${transaction.type}`"
-          >
-            {{ transaction.type === "income" ? "↑" : "↓" }}
-          </span>
-          {{ transaction.description }}
+    <!-- Scroll wrapper → fixes horizontal overflow on mobile -->
+    <div v-else class="transaction-table__scroll">
+      <div class="transaction-table">
+        <div class="transaction-table__head">
+          <span>Description</span>
+          <span>Category</span>
+          <span>Date</span>
+          <span class="transaction-table__col--right">Amount</span>
         </div>
 
-        <span class="transaction-table__category">
-          {{ transaction.category }}
-        </span>
-
-        <span class="transaction-table__date">
-          {{ formatDate(transaction.date) }}
-        </span>
-
-        <span
-          class="transaction-table__amount"
-          :class="`transaction-table__amount--${transaction.type}`"
+        <div
+          v-for="transaction in transactions"
+          :key="transaction.id"
+          class="transaction-table__row"
         >
-          {{ transaction.type === "income" ? "+" : "-"
-          }}{{ formatCurrency(transaction.amount) }}
-        </span>
+          <div class="transaction-table__desc">
+            <span
+              class="transaction-table__badge"
+              :class="`transaction-table__badge--${transaction.type}`"
+            >
+              {{ transaction.type === "income" ? "↑" : "↓" }}
+            </span>
+            {{ transaction.description }}
+          </div>
+
+          <span class="transaction-table__category">
+            {{ transaction.category }}
+          </span>
+
+          <span class="transaction-table__date">
+            {{ formatDate(transaction.date) }}
+          </span>
+
+          <span
+            class="transaction-table__amount"
+            :class="`transaction-table__amount--${transaction.type}`"
+          >
+            {{ transaction.type === "income" ? "+" : "-"
+            }}{{ formatCurrency(transaction.amount) }}
+          </span>
+        </div>
       </div>
     </div>
   </BaseCard>
@@ -96,6 +98,13 @@ const formatDate = (iso: string): string =>
 
 .transaction-table {
   width: 100%;
+  min-width: 560px;
+
+  &__scroll {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 
   &__head {
     display: grid;
@@ -126,6 +135,13 @@ const formatDate = (iso: string): string =>
   &__desc {
     @include flex($gap: $space-sm);
     font-weight: 500;
+    overflow: hidden;
+
+    span + * {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 
   &__badge {
@@ -152,18 +168,21 @@ const formatDate = (iso: string): string =>
   &__category {
     font-size: 0.8rem;
     color: $color-text-muted;
+    white-space: nowrap;
   }
 
   &__date {
     font-size: 0.8rem;
     color: $color-text-muted;
     font-family: $font-mono;
+    white-space: nowrap;
   }
 
   &__amount {
     font-family: $font-mono;
     font-weight: 600;
     text-align: right;
+    white-space: nowrap;
 
     &--income {
       color: $color-success;

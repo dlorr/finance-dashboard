@@ -63,6 +63,11 @@ onMounted(() => store.loadTransactions());
     grid-template-columns: 1.6fr 1fr;
     gap: $space-md;
     margin-bottom: $space-md;
+    min-width: 0;
+
+    & > * {
+      min-width: 0;
+    }
 
     @include respond-to("tablet") {
       grid-template-columns: 1fr;

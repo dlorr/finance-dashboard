@@ -5,12 +5,14 @@
     </div>
 
     <ClientOnly>
-      <apexchart
-        type="donut"
-        height="280"
-        :options="chartOptions"
-        :series="categoryChartData.series"
-      />
+      <div class="chart-card__chart-wrapper">
+        <apexchart
+          type="donut"
+          height="280"
+          :options="chartOptions"
+          :series="categoryChartData.series"
+        />
+      </div>
       <template #fallback>
         <div class="chart-card__fallback" />
       </template>
@@ -117,6 +119,17 @@ const chartOptions = computed(() => ({
 
 <style lang="scss" scoped>
 .chart-card {
+  min-width: 0;
+  overflow: hidden;
+
+  :deep(.apexcharts-canvas) {
+    width: 100% !important;
+
+    svg {
+      width: 100% !important;
+    }
+  }
+
   &__header {
     margin-bottom: $space-md;
   }
@@ -163,6 +176,12 @@ const chartOptions = computed(() => ({
     font-family: $font-mono;
     font-weight: 500;
     font-size: 0.75rem;
+  }
+
+  &__chart-wrapper {
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;
   }
 }
 

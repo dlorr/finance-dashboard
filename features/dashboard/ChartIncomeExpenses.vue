@@ -13,12 +13,14 @@
     </div>
 
     <ClientOnly>
-      <apexchart
-        type="area"
-        height="280"
-        :options="chartOptions"
-        :series="incomeExpensesChartData.series"
-      />
+      <div class="chart-card__chart-wrapper">
+        <apexchart
+          type="area"
+          height="280"
+          :options="chartOptions"
+          :series="incomeExpensesChartData.series"
+        />
+      </div>
       <template #fallback>
         <div class="chart-card__fallback" />
       </template>
@@ -99,6 +101,17 @@ const chartOptions = computed(() => ({
 
 <style lang="scss" scoped>
 .chart-card {
+  min-width: 0;
+  overflow: hidden;
+
+  :deep(.apexcharts-canvas) {
+    width: 100% !important;
+
+    svg {
+      width: 100% !important;
+    }
+  }
+
   &__header {
     @include flex($justify: space-between);
     margin-bottom: $space-md;
@@ -139,6 +152,12 @@ const chartOptions = computed(() => ({
     background: $color-surface-alt;
     border-radius: $border-radius-sm;
     animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  &__chart-wrapper {
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;
   }
 }
 

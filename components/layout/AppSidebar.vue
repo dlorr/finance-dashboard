@@ -21,8 +21,12 @@
     </nav>
   </aside>
 
-  <!-- Mobile toggle (rendered outside sidebar so it's always visible) -->
-  <button class="sidebar-toggle" @click="isOpen = !isOpen">
+  <button
+    class="sidebar-toggle"
+    :class="{ 'sidebar-toggle--open': isOpen }"
+    @click="isOpen = !isOpen"
+    aria-label="Toggle sidebar"
+  >
     <span />
     <span />
     <span />
@@ -30,32 +34,46 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
+import { useRoute } from "vue-router";
+
 const isOpen = ref(false);
+const route = useRoute();
+
+watch(
+  () => route.path,
+  () => {
+    isOpen.value = false;
+  },
+);
 </script>
 
 <style lang="scss" scoped>
 .sidebar {
-  @include card;
   position: fixed;
   top: 0;
   left: 0;
   width: $sidebar-width;
   height: 100vh;
-  border-radius: 0;
-  border-left: none;
-  border-top: none;
-  border-bottom: none;
+  background: $color-surface;
+  border-right: 1px solid $color-border;
   display: flex;
   flex-direction: column;
   gap: $space-xl;
   padding: $space-xl $space-md;
   z-index: 100;
+  overflow-y: auto;
 
+  // Desktop — always visible, no transition needed
+  @include respond-to("desktop") {
+    transform: translateX(0) !important;
+  }
+
+  // Tablet & mobile — hidden by default, slides in
   @include respond-to("tablet") {
     transform: translateX(-100%);
-    transition: transform 0.3s ease;
-    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.4);
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 4px 0 32px rgba(0, 0, 0, 0.5);
 
     &--open {
       transform: translateX(0);
@@ -67,6 +85,7 @@ const isOpen = ref(false);
     font-weight: 600;
     color: $color-primary;
     padding: 0 $space-sm;
+    flex-shrink: 0;
   }
 
   &__nav {
@@ -83,6 +102,7 @@ const isOpen = ref(false);
     text-decoration: none;
     font-size: 0.9rem;
     transition: all 0.15s ease;
+    white-space: nowrap;
 
     &--active {
       background: rgba($color-primary, 0.12);
@@ -104,7 +124,7 @@ const isOpen = ref(false);
 .sidebar-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
   z-index: 99;
   display: none;
 
@@ -116,20 +136,26 @@ const isOpen = ref(false);
 .sidebar-toggle {
   display: none;
   position: fixed;
-  top: $space-md;
+  top: 14px;
   left: $space-md;
   z-index: 101;
+
   background: $color-surface;
   border: 1px solid $color-border;
-  padding: $space-sm;
   border-radius: $border-radius-sm;
   cursor: pointer;
-  flex-direction: column;
-  gap: 5px;
   width: 36px;
   height: 36px;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 5px;
+  padding: 0;
+  transition: border-color 0.15s ease;
+
+  &:hover {
+    border-color: $color-primary;
+  }
 
   span {
     display: block;
@@ -137,7 +163,21 @@ const isOpen = ref(false);
     height: 2px;
     background: $color-text;
     border-radius: 2px;
-    transition: all 0.2s ease;
+    transition: all 0.25s ease;
+    transform-origin: center;
+  }
+
+  &--open {
+    span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+    span:nth-child(2) {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+    span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
   }
 
   @include respond-to("tablet") {

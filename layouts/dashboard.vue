@@ -17,25 +17,38 @@ import AppTopbar from "~/components/layout/AppTopbar.vue";
 
 <style lang="scss" scoped>
 .dashboard-layout {
-  @include flex($align: stretch);
+  display: flex;
   min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
 
   &__main {
     flex: 1;
     display: flex;
     flex-direction: column;
+    min-width: 0;
     margin-left: $sidebar-width;
+    max-width: calc(100% - #{$sidebar-width});
 
     @include respond-to("tablet") {
       margin-left: 0;
-      padding-top: $topbar-height;
+      max-width: 100%;
     }
   }
 
   &__content {
     flex: 1;
     padding: $space-lg $space-xl;
-    overflow-y: auto;
+    overflow-x: hidden;
+    min-width: 0;
+
+    @include respond-to("tablet") {
+      padding: $space-lg $space-md;
+    }
+
+    @include respond-to("mobile") {
+      padding: $space-md $space-sm;
+    }
   }
 }
 </style>
