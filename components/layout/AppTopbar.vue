@@ -31,12 +31,10 @@ const currentDate = new Date().toLocaleDateString("en-US", {
 
   @include respond-to("tablet") {
     padding: 0 $space-md;
-    padding-left: calc(#{$space-md} + 48px);
   }
 
   @include respond-to("mobile") {
     padding: 0 $space-sm;
-    padding-left: calc(#{$space-sm} + 48px);
   }
 
   &__title {
@@ -51,6 +49,7 @@ const currentDate = new Date().toLocaleDateString("en-US", {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    padding-right: 48px;
 
     @include respond-to("mobile") {
       display: none;

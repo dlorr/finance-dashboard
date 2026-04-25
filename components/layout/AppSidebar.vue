@@ -137,7 +137,7 @@ watch(
   display: none;
   position: fixed;
   top: 14px;
-  left: $space-md;
+  right: $space-md;
   z-index: 101;
 
   background: $color-surface;
