@@ -65,15 +65,22 @@ export interface FinanceState {
   error: string | null;
 }
 
-// ─── Filters (future) ─────────────────────────────────────────────────────────
-
+// ─── Filters ─────────────────────────────────────────────────────────
 export interface TransactionFilters {
-  dateFrom?: string; // ISO date
-  dateTo?: string; // ISO date
-  type?: TransactionType | null;
-  categories?: TransactionCategory[];
-  search?: string;
+  dateFrom: string; // ISO date
+  dateTo: string; // ISO date
+  type: TransactionType | "";
+  categories: TransactionCategory[];
+  search: string;
 }
+
+export const DEFAULT_FILTERS: TransactionFilters = {
+  dateFrom: "",
+  dateTo: "",
+  type: "",
+  categories: [],
+  search: "",
+};
 
 export interface PaginationOptions {
   page: number;

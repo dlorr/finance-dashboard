@@ -20,12 +20,26 @@
         <SummaryCards />
       </Transition>
 
-      <div class="dashboard-page__charts">
-        <ChartIncomeExpenses />
-        <ChartExpenseCategories />
+      <FilterBar />
+
+      <div
+        v-if="filteredTransactions.length === 0 && hasActiveFilters"
+        class="dashboard-page__empty"
+      >
+        <span>🔍</span>
+        <p>No transactions match your filters.</p>
+        <button class="dashboard-page__empty-clear" @click="clearFilters">
+          Clear filters
+        </button>
       </div>
 
-      <TransactionTable />
+      <template v-else>
+        <div class="dashboard-page__charts">
+          <ChartIncomeExpenses />
+          <ChartExpenseCategories />
+        </div>
+        <TransactionTable />
+      </template>
     </template>
   </div>
 </template>
@@ -41,11 +55,15 @@ import TransactionTableSkeleton from "~/features/dashboard/TransactionTableSkele
 import ChartIncomeExpenses from "~/features/dashboard/ChartIncomeExpenses.vue";
 import ChartExpenseCategories from "~/features/dashboard/ChartExpenseCategories.vue";
 import ChartSkeleton from "~/features/dashboard/ChartSkeleton.vue";
+import FilterBar from "~/features/dashboard/FilterBar.vue";
+import { useFinanceFilters } from "~/composables/useFinanceFilters";
 
 definePageMeta({ layout: "dashboard" });
 
 const store = useFinanceStore();
 const { isLoading, error } = useFinanceStats();
+const { filteredTransactions, hasActiveFilters, clearFilters } =
+  useFinanceFilters();
 
 onMounted(() => store.loadTransactions());
 </script>
@@ -79,6 +97,38 @@ onMounted(() => store.loadTransactions());
     padding: $space-2xl;
     color: $color-danger;
     font-size: 0.9rem;
+  }
+
+  &__empty {
+    @include flex($align: center, $justify: center);
+    flex-direction: column;
+    gap: $space-md;
+    padding: $space-2xl;
+    color: $color-text-muted;
+    text-align: center;
+
+    span {
+      font-size: 2.5rem;
+    }
+    p {
+      font-size: 0.9rem;
+    }
+  }
+
+  &__empty-clear {
+    background: transparent;
+    border: 1px solid $color-primary;
+    border-radius: $border-radius-sm;
+    color: $color-primary;
+    font-family: $font-sans;
+    font-size: 0.85rem;
+    padding: $space-sm $space-lg;
+    cursor: pointer;
+    transition: all 0.15s ease;
+
+    &:hover {
+      background: rgba($color-primary, 0.1);
+    }
   }
 }
 </style>
