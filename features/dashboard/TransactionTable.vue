@@ -21,6 +21,7 @@
           <span>Category</span>
           <span>Date</span>
           <span class="transaction-table__col--right">Amount</span>
+          <span></span>
         </div>
 
         <div
@@ -53,17 +54,42 @@
             {{ transaction.type === "income" ? "+" : "-"
             }}{{ formatCurrency(transaction.amount) }}
           </span>
+
+          <!-- Actions -->
+          <div class="transaction-table__actions">
+            <button
+              class="transaction-table__action-btn transaction-table__action-btn--edit"
+              title="Edit"
+              @click="openEdit(transaction)"
+            >
+              ✏️
+            </button>
+            <button
+              class="transaction-table__action-btn transaction-table__action-btn--delete"
+              title="Delete"
+              @click="deleteModal?.open(transaction.id)"
+            >
+              🗑️
+            </button>
+          </div>
         </div>
       </div>
     </div>
+
+    <DeleteConfirmModal ref="deleteModal" />
   </BaseCard>
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
 import { useFinanceStats } from "~/composables/useFinanceStats";
+import { useTransactionModal } from "~/composables/useTransactionModal";
 import BaseCard from "~/components/ui/BaseCard.vue";
+import DeleteConfirmModal from "~/features/dashboard/DeleteConfirmModal.vue";
 
 const { transactions } = useFinanceStats();
+const { openEdit } = useTransactionModal();
+const deleteModal = ref<InstanceType<typeof DeleteConfirmModal> | null>(null);
 
 const formatCurrency = (value: number): string =>
   new Intl.NumberFormat("en-PH", { style: "currency", currency: "PHP" }).format(
@@ -206,6 +232,30 @@ const formatDate = (iso: string): string =>
 
     span {
       font-size: 2rem;
+    }
+  }
+  &__actions {
+    @include flex($justify: flex-end, $gap: $space-xs);
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+
+  &__row:hover &__actions {
+    opacity: 1;
+  }
+
+  &__action-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 0.85rem;
+    padding: 4px;
+    border-radius: $border-radius-sm;
+    line-height: 1;
+    transition: background 0.15s ease;
+
+    &:hover {
+      background: $color-surface-alt;
     }
   }
 }

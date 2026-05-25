@@ -55,5 +55,27 @@ export const useFinanceStore = defineStore("finance", {
 
       this.isLoading = false;
     },
+
+    addTransaction(payload: Omit<Transaction, "id">): void {
+      const newTransaction: Transaction = {
+        ...payload,
+        id: `txn_${Date.now()}`,
+      };
+      this.transactions.push(newTransaction);
+    },
+
+    updateTransaction(id: string, payload: Partial<Transaction>): void {
+      const index = this.transactions.findIndex((t) => t.id === id);
+      if (index !== -1) {
+        this.transactions[index] = {
+          ...this.transactions[index],
+          ...payload,
+        };
+      }
+    },
+
+    deleteTransaction(id: string): void {
+      this.transactions = this.transactions.filter((t) => t.id !== id);
+    },
   },
 });
